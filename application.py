@@ -24,7 +24,7 @@ welcome = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jenish Revaldo C - Data Analyst Resume</title>
+    <title>Kevin Xaviour - Data Analyst Resume</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -60,13 +60,13 @@ welcome = """
     </style>
 </head>
 <body>
-    <h1>Jenish Revaldo C   -  Data Analyst</h1>
+    <h1>Kevvin Xaviour   -  Data Analyst</h1>
   
     <p>Driven and adaptable Data Analyst with a passion for continuous learning and leadership. Skilled in mathematics, statistics, and programming, I excel at solving complex problems and extracting valuable insights from data. Committed to staying updated on industry trends to deliver impactful data-driven solutions.</p>
     
     <div class="contact">
         <h2>Contact Information</h2>
-        <p>Email: jenishrev0603@gmail.com</p>
+        <p>Email: kev@gmail.com</p>
         <p>Phone: 7358941365</p>
         <p>Location: Kanyakumari, India</p>
         <p>LinkedIn: <a href="https://www.linkedin.com/in/jenish-revaldo-c-004670245">linkedin.com/in/jenish-revaldo-c-004670245</a></p>
