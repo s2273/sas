@@ -1,0 +1,114 @@
+8)gradients and edge detec
+#Importing libraries
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+#Loading the image
+image1 = cv2.imread(&#39;/content/download.jfif&#39;)
+image = cv2.cvtColor(image1,cv2.COLOR_BGR2GRAY)
+
+lap = cv2.Laplacian(image,cv2.CV_64F)
+lap = np.uint8(np.absolute(lap))
+plt.imshow(lap)
+
+lm = cv2.cvtColor(image1,cv2.COLOR_BGRA2GRAY)
+plt.imshow(lm)
+
+sobelx = cv2.Sobel(image1,cv2.CV_64F,1,0)
+sobely = cv2.Sobel(image1,cv2.CV_64F,0,1)
+sobelx = np.uint8(np.absolute(sobelx))
+sobely = np.uint8(np.absolute(sobely))
+Sobelcombinbed = cv2.bitwise_or(sobelx,sobely)
+
+plt.imshow(sobelx)
+plt.imshow(sobely)
+
+img=cv2.imread(&#39;/content/download.jfif&#39;)
+edges=cv2.Canny(img,100,200)
+plt.imshow(img)
+plt.title(&#39;original&#39;)
+plt.show()
+
+plt.imshow(edges)
+plt.title(&#39;Canny Edge Detection&#39;)
+plt.show()
+
+9)harris corener
+#Importing libraries
+import cv2
+import matplotlib.pyplot as plt
+
+#Loading the image
+img = cv2.imread(&quot;/content/chess.jpg&quot;)
+#Converting the image color
+gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+
+#Harris corner detection
+dst = cv2.cornerHarris(gray,2,3,0,.04)
+dst = cv2.dilate(dst,None)
+img[dst&gt;0.01 * dst.max()] = [255,0,0]
+plt.figure(figsize=(10,10))
+plt.imshow(img)
+
+img = cv2.imread(&quot;/content/download (3).jpg&quot;)
+
+gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+
+dst = cv2.cornerHarris(gray,2,3,0,.04)
+dst = cv2.dilate(dst,None)
+img[dst>0.01 * dst.max()] = [255,0,0]
+plt.figure(figsize=(10,10))
+plt.imshow(img)
+img = cv2.imread(&quot;/content/edge-detect.png.img.png&quot;)
+gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+dst = cv2.cornerHarris(gray,2,3,0,.04)
+dst = cv2.dilate(dst,None)
+img[dst>0.01 * dst.max()] = [255,0,0]
+plt.figure(figsize=(10,10))
+plt.imshow(img)
+
+10)img contours
+#Importing the libraries
+import cv2
+import matplotlib.pyplot as plt
+
+#Image contours
+image = cv2.imread(&#39;/content/download.jfif&#39;)
+gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+blurred=cv2.GaussianBlur(gray,(11,11),0)
+edged=cv2.Canny(blurred, 30,150)
+
+cnts,_=
+cv2.findContours(edged.copy(),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+
+coins = image.copy()
+
+cv2.drawContours(coins,cnts,-1,(0,255,0),3)
+
+plt.imshow(coins)
+
+plt.imshow(cv2.cvtColor(image,cv2.COLOR_BGR2RGB))
+
+plt.imshow(edged)
+
+11)face detection
+#Importing the libraries
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+#Importing the xml file
+facecascade = cv2.CascadeClassifier(&#39;/content/face.xml&#39;)
+
+#Importing the image
+img = cv2.imread(&quot;/content/download.jpg&quot;)
+img2 = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+plt.imshow(img2)
+
+#Face detection using detect MultiScale
+face_img=img2.copy()
+face_rect = facecascade.detectMultiScale(face_img,scaleFactor = 1.2, minNeighbors = 5)
+for (x,y,w,h) in face_rect:
+cv2.rectangle(face_img,(x,y),(x+w,y+h),(245,5,0),2)
+plt.imshow(face_img)
