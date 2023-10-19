@@ -24,10 +24,10 @@ Sobelcombinbed = cv2.bitwise_or(sobelx,sobely)
 plt.imshow(sobelx)
 plt.imshow(sobely)
 
-img=cv2.imread(&#39;/content/download.jfif&#39;)
+img=cv2.imread('/content/download.jfif')
 edges=cv2.Canny(img,100,200)
 plt.imshow(img)
-plt.title(&#39;original&#39;)
+plt.title('original')
 plt.show()
 
 plt.imshow(edges)
@@ -43,30 +43,13 @@ import matplotlib.pyplot as plt
 img = cv2.imread(&quot;/content/chess.jpg&quot;)
 #Converting the image color
 gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-
 #Harris corner detection
 dst = cv2.cornerHarris(gray,2,3,0,.04)
 dst = cv2.dilate(dst,None)
-img[dst&gt;0.01 * dst.max()] = [255,0,0]
-plt.figure(figsize=(10,10))
-plt.imshow(img)
-
-img = cv2.imread(&quot;/content/download (3).jpg&quot;)
-
-gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-
-dst = cv2.cornerHarris(gray,2,3,0,.04)
-dst = cv2.dilate(dst,None)
 img[dst>0.01 * dst.max()] = [255,0,0]
 plt.figure(figsize=(10,10))
 plt.imshow(img)
-img = cv2.imread(&quot;/content/edge-detect.png.img.png&quot;)
-gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-dst = cv2.cornerHarris(gray,2,3,0,.04)
-dst = cv2.dilate(dst,None)
-img[dst>0.01 * dst.max()] = [255,0,0]
-plt.figure(figsize=(10,10))
-plt.imshow(img)
+
 
 10)img contours
 #Importing the libraries
