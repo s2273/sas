@@ -1,0 +1,199 @@
+5)rnn
+#Import the necessary libraries
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from keras.datasets import reuters
+import tensorflow as tf
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from keras.models import Sequential
+from tensorflow.keras.utils import to_categorical
+from keras.layers import Dense, SimpleRNN, Activation, LSTM, GRU
+from tensorflow.keras.optimizers import Adam
+from sklearn.metrics import accuracy_score
+
+#Initializing the values
+num_words = None
+maxlen = 50
+test_split = 0.3
+
+#Splitting the dataset
+(x_train,y_train),(x_test,y_test) = reuters.load_data(num_words = num_words, maxlen =
+maxlen, test_split = test_split)
+
+print(x_train.shape)
+print(x_test.shape)
+print(y_train.shape)
+print(y_test.shape)
+
+from numpy.core.fromnumeric import shape
+x_train = pad_sequences(x_train, padding = &#39;post&#39;)
+x_test = pad_sequences(x_test, padding = &#39;post&#39;)
+x_train = np.array(x_train).reshape((x_train.shape[0],x_train.shape[1],1))
+x_test = np.array(x_test).reshape((x_test.shape[0],x_test.shape[1],1))
+x_train.shape, x_test.shape
+y_train.shape, y_test.shape
+y_data = np.concatenate((y_train,y_test))
+y_data = to_categorical(y_data)
+y_train = y_data[:1395]
+y_test = y_data[1395:]
+
+#Simple RNN
+model = Sequential()
+model.add(SimpleRNN(50, input_shape=(49,1)))
+model.add(Dense(46))
+model.add(Activation(&#39;softmax&#39;))
+adam = Adam(learning_rate = 0.001)
+
+#Model compilation
+model.compile(loss = &#39;categorical_crossentropy&#39;, optimizer = adam, metrics = [&#39;accuracy&#39;])
+model.fit(x_train,y_train, epochs = 100, validation_split=0.3)
+
+score = model.evaluate(x_test,y_test, verbose = 0)
+print('Test Loss:', score[0])
+print('Test Accuracy:', score[1])
+
+#LSTM
+#Model creation
+ls = Sequential()
+ls.add(LSTM(50, input_shape=(49,1)))
+ls.add(Dense(46))
+ls.add(Activation(&#39;softmax&#39;))
+from keras import metrics
+adam = Adam(learning_rate = 0.001)
+
+#Model compilation
+ls.compile(loss = &#39;categorical_crossentropy&#39;, optimizer = adam, metrics = [&#39;accuracy&#39;])
+ls.fit(x_train,y_train, epochs = 100, validation_split=0.3)
+
+#Model evaluation
+score = ls.evaluate(x_test,y_test, verbose = 0)
+print(&#39;Test Loss: &#39;, score[0])
+print(&#39;Test Accuracy: &#39;, score[1])
+
+#GRU
+#Model creation
+gr = Sequential()
+gr.add(GRU(50, input_shape=(49,1)))
+gr.add(Dense(46))
+gr.add(Activation(&#39;sigmoid&#39;))
+
+#Model compilation
+gr.compile(loss = &#39;binary_crossentropy&#39;, optimizer = &#39;adam&#39;, metrics = [&#39;accuracy&#39;])
+gr.fit(x_train,y_train, epochs = 10, validation_split = 0.3)
+
+#Model evaluation
+score = gr.evaluate(x_test,y_test, verbose = 0)
+
+print(&#39;Test Loss: &#39;, score[0])
+print(&#39;Test Accuracy: &#39;, score[1])
+
+
+6)segmentataion
+#Importing libraries
+import cv2
+import pandas as pd
+import numpy as np
+import tensorflow as tf
+import matplotlib.pyplot as plt
+
+#Loading the data
+image=cv2.imread(&#39;/content/download (1).jpg&#39;,cv2.IMREAD_GRAYSCALE)
+image
+
+#Simple thresholding
+ret, thresh1 = cv2.threshold(image,127,255,cv2.THRESH_BINARY)
+ret, thresh2 = cv2.threshold(image,127,255,cv2.THRESH_BINARY_INV)
+ret, thresh3 = cv2.threshold(image,127,255,cv2.THRESH_TRUNC)
+ret, thresh4 = cv2.threshold(image,127,255,cv2.THRESH_TOZERO)
+ret, thresh5 = cv2.threshold(image,127,255,cv2.THRESH_TOZERO_INV)
+
+titles = [&#39;original_image&#39;,&#39;BINARY&#39;,&#39;BINARY_INV&#39;,&#39;TRUNC&#39;,&#39;TOZERO&#39;,&#39;TOZERO_INV&#39;]
+
+images = [image,thresh1,thresh2,thresh3,thresh4,thresh5]
+
+plt.figure(figsize=(20,10))
+for i in range(6):
+plt.subplot(2,3,i+1)
+plt.imshow(images[i],&#39;gray&#39;)
+plt.xticks([])
+plt.yticks([])
+plt.title(titles[i])
+plt.show()
+
+#Adaptive thresholding
+img = cv2.imread(&#39;/content/download (2).jpg&#39;)
+img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+ret, thresh1 = cv2.threshold(img,127,255,cv2.THRESH_BINARY)
+thresh2=cv2.adaptiveThreshold(img,225,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_
+BINARY,11,2)
+thresh3 =
+cv2.adaptiveThreshold(img,225,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BI
+NARY,11,2)
+
+titles = [&#39;original Image&#39;,&#39;Global Thresholding(v=127)&#39;,&#39;Adaptive Mean Thresholding&#39;,&#39;Adaptive
+Guassian Thresholding&#39;]
+
+images = [img,thresh1,thresh2,thresh3]
+
+plt.figure(figsize=(20,10))
+
+for i in range(4):
+plt.subplot(2,2,i+1)
+
+plt.imshow(images[i],&#39;gray&#39;)
+plt.title(titles[i])
+plt.xticks()
+plt.yticks()
+plt.show()
+
+7)transformation
+#Importing libraries
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+
+#Geometric transformations of images
+#Scaling
+img=cv2.imread(&quot;/content/cat.jfif&quot;)
+height,width=img.shape[:2]
+res=cv2.resize(img,(2*width,5*height),interpolation=cv2.INTER_NEAREST)
+plt.imshow(img)
+
+#Translation
+img=cv2.imread(&quot;/content/cat.jfif&quot;)
+rows,cols,s=img.shape
+M=np.float32([[1,0,50],[0,1,100]])
+dst=cv2.warpAffine(img,M,(cols,rows))
+plt.imshow(dst)
+
+#Rotation
+
+M=cv2.getRotationMatrix2D((cols/2,rows/2),50,1)
+dst=cv2.warpAffine(img,M,(cols,rows))
+plt.imshow(dst,&#39;gray&#39;)
+# Morphological Transformations of Images
+# Erosion
+img=cv2.imread(&quot;/content/cat.jfif&quot;)
+kernel=np.ones((5,5),np.uint8)
+plt.imshow(img,&#39;gray&#39;)
+erosion=cv2.erode(img,kernel,iterations=1)
+plt.imshow(erosion,&#39;gray&#39;)
+
+#Dilation
+dilation=cv2.dilate(img,kernel,iterations=1)
+plt.imshow(dilation,&#39;gray&#39;)
+
+img=cv2.imread(&#39;/content/cat.jfif&#39;)
+plt.imshow(img)
+
+#Opening
+opening=cv2.morphologyEx(img,cv2.MORPH_OPEN,kernel)
+plt.imshow(opening)
+
+img = cv2.imread(&#39;/content/cat.jfif&#39;)[0:150][0:120]
+plt.imshow(img)
+
+#Closing
+closing = cv2.morphologyEx(img,cv2.MORPH_CLOSE,kernel)
+plt.imshow(closing)
