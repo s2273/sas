@@ -1,0 +1,144 @@
+5)Jenkins
+
+sudo apt update
+curl -fsSL https://get.docker.com -o get-docker.sh
+docker –version
+Step 5: Create a docker hub account in DockerHub website
+sudo docker login -u <username> -p <password>
+Replace <username> and <password> with DockerHub username and password.
+sudo apt install openjdk-17-jre
+java -version
+Step 9: Import Jenkins Repository Key.
+ubuntu@ip-172-31-47-227:~$ curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key |
+sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+Step 10: Add Jenkins Repository to Sources List.
+ubuntu@ip-172-31-47-227:~$echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]
+https://pkg.jenkins.io/debian binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update
+sudo apt-get install jenkins
+sudo systemctl start jenkins.service
+ubuntu@ip-172-31-47-227:~$ sudo systemctl status jenkins
+Step 14: Configure firewall to allow traffic on port 8080 for Jenkins, SSH connections for
+remote access, port 8000 for container communication.
+ sudo ufw allow 8080
+ allow OpenSSH
+sudo ufw allow 8000
+Step 15: Enable the firewall.
+ubuntu@ip-172-31-47-227:~$ sudo ufw enable
+Step 16: Check the firewall status.
+ubuntu@ip-172-31-47-227:~$ sudo ufw status
+Step 17: Retrieve the initialAdminPassword for Jenkins setup.
+ubuntu@ip-172-31-47-227:~$ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+c84c43b9adf14d60873f4185427328ba
+Step 18: Add the Jenkins user to the docker group for Docker access.
+ubuntu@ip-172-31-47-227:~$ sudo usermod -aG docker jenkins
+Step 19: Restart Jenkins service to apply the changes.
+ubuntu@ip-172-31-47-227:~$ sudo systemctl restart jenkins
+Step 20: Allow Custom TCP port 8080, 8000 in Inbound rules.
+Step 21: Now open <Public_IP_Address_of_EC2_Instance>:8080 in Browser to open
+Jenkins.
+Step 22: Login with initialAdminPassword that we retrieved – Install suggested plugins –
+Setup new username and password.
+Step 23: Setup Credentials in Jenkins.
+Manage Jenkins->Credentials->global->add credentials
+Now add your Docker hub User name and password and save it with Id (I have used test1).
+Also make necessary changes in the Jenkinsfile like setting credentials id and username of
+docker
+Step 24: Create Pipeline in Jenkins.
+dashboard->new item->enter item name->pipeline->ok
+description:automated bills
+poll scm:*****
+next
+definiton:pipeline script from scm
+scm:git
+repository url:( )
+next
+branch specifier:*/main
+save
+build now
+Now open <Public_IP_Address_of_EC2_Instance>:8000 in Browser
+
+6)image
+: Once Jenkins is installed and configured, navigate to the EC2 Management Console
+and stop the EC2 instance.
+Step 11: Select your instance, right-click, and choose "Image" > "Create Image."
+Step 12: Provide a name and description for the image and create it.
+Step 13: Navigate to Images > AMIs in the EC2 dashboard to see the images
+<after navigating>
+Step 14: To launch a new instance with the created image, select the image and click Launch
+instance from AMI
+Step 15: Follow the instance launch wizard, giving name, choosing key pair, configuring
+security groups and other settings as needed and launch.
+Step 16: Now navigate to the EC2 instances dashboard and you can see the newly created
+instance from image.
+Step 17: Connect to the new EC2 instance using SSH. Check if Jenkins is installed and
+running.
+root@ip-172-31-24-134:~# jenkins --version
+2.424
+root@ip-172-31-24-134:~# sudo systemctl status jenkins
+Enter an item name of your wish.
+<next>
+Add some description:
+<next>
+Build Triggers with Poll SCM.
+This poll SCM with Schedule ‘* * * * *’ will check the git repository every minute and if a
+commit is encounter it automatically build up…
+<next>
+Display name – The same name given in item name
+<next>
+Setting up pipeline definition from my GitHub Repository.
+<next>
+Change the branch specifier according to your repository and save the pipeline.
+<next>
+Now build the pipeline.
+<next>
+Stages of pipeline will get executed.
+Step 25: Now open <Public_IP_Address_of_EC2_Instance>:8000 in Browser
+
+7)snapshot
+Step 1: Create an EC2 instance with Ubuntu in Amazon Machine Image
+Step 2: Update package information on the Ubuntu EC2 instance.
+ubuntu@ip-172-31-16-6:~$ sudo apt update
+Step 3: Install MySQL server on the instance.
+ubuntu@ip-172-31-16-6:~$ sudo apt install mysql-server
+Step 4: Check the status of the MySQL service to ensure it's running.
+ubuntu@ip-172-31-16-6:~$ sudo systemctl status mysql
+Step 5: Navigate to the EC2 Management Console and select your instance volume id.
+<navigates to volume dashboard>
+Step 6: Select the volume, Actions > Create snapshot
+Step 7: Navigate to Elastic Block Store > Snapshots in the EC2 dashboard to see the
+snapshots.
+Step 8: Select the snapshot, Actions > Create image from snapshot.
+Step 9: Give image name and create image.
+Step 10: Navigate to Images > AMIs in the EC2 dashboard to see the images
+<After Navigating>
+Step 11: To launch a new instance with the created image, select the image and click Launch
+instance from AMI
+Step 12: Follow the instance launch wizard, giving name, choosing key pair, configuring
+security groups and other settings as needed and launch.
+Step 13: Now navigate to the EC2 instances dashboard and you can see the newly created
+instance from image.
+Step 14: Connect to the new EC2 instance using SSH. Check if MySQL is installed and
+running.
+ubuntu@ip-172-31-16-6:~$ sudo systemctl status mysql
+
+8)wordpress
+In the AWS Management Console, navigate to the EC2 service, Click on "Launch
+Instance."
+• In the "AWS Marketplace" section, search for "Bitnami WordPress."
+• Select the Bitnami WordPress AMI from the list.
+<now launch the instance>
+Step 2: Open the public Ip address of the created instance
+<next>
+<after opening the public Ip address>
+Step 3: Move to the admin page by adding /wp-admin after the Ip address.
+<after adding, the page would be>
+Step 4: Get username and password from System log (Actions > Monitor and troubleshoot >
+Get system log)
+<you can see username and password here in system log>
+Step 5: Login using the credentials and it will navigate to the dashboard page.
+<Dashboard page>
+Step 6: Now you can edit the page by navigating to User’s blob > Visit Site > Edit Page
+<next>
+Step 7: Now you can start building your profile, after editing click on ‘Update’.
+Step 8: Now navigate to the public Ip address, your contents will be updated.
