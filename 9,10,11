@@ -1,1 +1,188 @@
+9)azure web app
+Step 1: Create a Web App in Azure App Service
+1. In the Azure Portal, navigate to the Azure App Service section.
+2. Click on "Create" to create a new web app.
+<next>
+3. Provide a unique name for your web app. Choose your subscription, resource group,
+and App Service plan (or create a new one).
+4. Select your runtime stack (e.g., .NET, Node.js, Python). Configure other settings like
+the operating system, region, and whether you want to enable or disable application
+insights.
+5. Review your settings and click "Create" to provision the web app.
+<next>
+Step 2: Connect to the cloud shell using Bash
+<then it shows the cloud shell>
+Step 3: Use the ‘wget’ command to download the website files from a source URL. In this
+example, we downloaded a zip file named "antique-cafe.zip."
+charles [ ~ ]$ wget https://www.free-css.com/assets/files/free-csstemplates/download/page295/antique-cafe.zip
+Step 4: Use the ‘unzip’ command to extract the contents of the downloaded zip file. This
+will create a directory containing the website files.
+charles [ ~ ]$ ls
+antique-cafe.zip azure-mol-samples-2nd-ed clouddrive
+charles [ ~ ]$ unzip antique-cafe.zip
+Step 5: Set your Git user email and name using the following commands
+charles [ ~ ]$ git config --global user.email "your-email@example.com"
+charles [ ~ ]$ git config --global user.name "your-username"
+Step 6: Change your working directory to the directory containing your website files
+charles [ ~ ]$ ls
+2126_antique_cafe antique-cafe.zip azure-mol-samples-2nd-ed clouddrive
+charles [ ~ ]$ cd 2126_antique_cafe
+charles [ ~/2126_antique_cafe ]$ ls -ltr
+total 36
+-rw-r--r-- 1 charles charles 510 Jul 30 2019 'ABOUT THIS TEMPLATE.txt'
+drwxr-xr-x 2 charles charles 4096 Sep 29 2021 webfonts
+drwxr-xr-x 2 charles charles 4096 Sep 29 2021 js
+drwxr-xr-x 2 charles charles 4096 Sep 29 2021 img
+-rw-r--r-- 1 charles charles 15522 Sep 30 2021 index.html
+drwxr-xr-x 2 charles charles 4096 Sep 30 2021 css
+Step 7: Initialize a Git Repository
+charles [ ~/2126_antique_cafe ]$ git init
+Step 8: Add and Commit Website Files
+charles [ ~/2126_antique_cafe ]$ git add .
+charles [ ~/2126_antique_cafe ]$ git commit -m "css!"
+Step 9: Use the Azure CLI to configure deployment credentials for your Azure Web App.
+charles [ ~/2126_antique_cafe ]$ az webapp deployment source config-local-git --name pizza-launchess --resource-group MOL-AppService
+Step 10: Retrieve the publishing credentials for your Azure Web App using the Azure CLI.
+az webapp deployment list-publishing-credentials --name pizza-launchess --resource-group MOL-AppService
+ ("scmUri": "https://$pizzalaunchess:6bBoiQrt2WlNrzWlaXG3bKjDSsqmDlc6QetjJPdoynCckh1W6nKhkCljjcZ3)
+@pizza-launchess.scm.azurewebsites.net",
+
+git remote add azure 'https://$pizzalaunchess:6bBoiQrt2WlNrzWlaXG3bKjDSsqmDlc6QetjJPdoynCckh1W6nKhkCljjcZ3@pizzalaunchess.scm.azurewebsites.net'
+git push -f azure master
+
+10)kubernetes
+Step 1: Creating a Kubernetes cluster
+Create an AKS cluster using Azure portal.
+Create resource → Containers → Azure Kubernetes Services → Create.
+<select containers>
+<In Azure Kubernetes Services, Select Create>
+Step 2: Fill out the settings and configuration
+Basics tab:
+1. Give a resource group and a cluster name
+2. Select region as US East
+3. Cluster preset configuration as Dev/Test Nodes tab:
+<Networking tab>
+1. Select Network configuration as kubenet
+<Integrations tab>
+Changes are not necessary. Proceed as it is.
+<Advanced tab>
+Changes are not necessary. Proceed as it is.
+<Tags tab>
+Changes are not necessary. Proceed as it is.
+<Review and create tab>
+Click create after validation is passed
+Step 3: Wait for the deployment to complete.
+<after deployment, click on go to resources>
+Step 4: Connect to Cloud shell using PowerShell
+Step 5: Connect to the AKS Cluster
+1. Run the following command to connect to your AKS cluster
+PS /home/charles> az aks get-credentials --resource-group MOL-AppService --name
+MyAKS
+Merged "MyAKS" as current context in /home/charles/.kube/config
+This command configures your local kubectl to use the AKS cluster.
+2. Verify that you are connected to the AKS cluster (display information about the nodes
+in your AKS cluster).
+PS /home/charles> kubectl get nodes
+ NAME STATUS ROLES AGE VERSION
+aks-agentpool-11990967-vmss000000 Ready agent 7m22s v1.26.6
+aks-agentpool-11990967-vmss000001 Ready agent 7m28s v1.26.6
+Step 6: Check for Existing Pods and Resources
+1. Check for existing pods in the default namespace:
+PS /home/charles> kubectl get pods
+No resources found in default namespace.
+2. Check for all resources (including services, deployments, and pods):
+PS /home/charles> kubectl get all
+NAME TYPE CLUSTER-IP EXTERNAL-IP PORT(S) AGE
+service/kubernetes ClusterIP 10.0.0.1 <none> 443/TCP 8m47s
+Step 7: Create and Apply a Kubernetes Manifest
+1. Create or edit a Kubernetes manifest file (in this case, askapp.yml):
+PS /home/charles> vi askapp.yml
+Paste the yml contents and Finally add :wq! and click enter.
+Contents are obtained from https://github.com/Azure-Samples/azure-voting-appredis/blob/master/azure-vote-all-in-one-redis.yaml
+2. List the files in your current directory to ensure askapp.yml is present:
+PS /home/charles> ls
+2126_antique_cafe antique-cafe.zip askapp.yml azure-mol-samples-2nd-ed
+clouddrive Microsoft
+3. Apply the Kubernetes manifest to create the resources:
+PS /home/charles> kubectl apply -f askapp.yml
+deployment.apps/azure-vote-back created
+service/azure-vote-back created
+deployment.apps/azure-vote-front created
+service/azure-vote-front created
+Step 8: Check Deployments, Services, and Pods
+1. Check the status of deployments:
+PS /home/charles> kubectl get deployments
+NAME READY UP-TO-DATE AVAILABLE AGE
+azure-vote-back 1/1 1 1 30s
+azure-vote-front 1/1 1 1 30s
+2. Check the status of services (This should display the services and their external IP
+addresses).
+PS /home/charles> kubectl get svc
+NAME TYPE CLUSTER-IP EXTERNAL-IP PORT(S) AGE
+azure-vote-back ClusterIP 10.0.80.231 <none> 6379/TCP 75s
+azure-vote-front LoadBalancer 10.0.233.213 52.149.236.217 80:32717/TCP
+74s
+kubernetes ClusterIP 10.0.0.1 <none> 443/TCP 16m
+3. Retrieve information about ReplicaSets
+PS /home/charles> kubectl get rs
+NAME DESIRED CURRENT READY AGE
+azure-vote-back-66c88ccc8 1 1 1 2m18s
+azure-vote-front-85dc674b97 1 1 1 2m18s
+4. Verify that pods are running:
+PS /home/charles> kubectl get pods
+
+11)bean stack
+1. Log in to your AWS Management Console.
+2. Go to the IAM (Identity and Access Management) dashboard.
+3. Click on "Roles" in the left navigation pane. 
+4. Click the "Create role" button. 
+5. Choose "AWS service" as the trusted entity type. 
+6. Scroll down and select "EC2" as the use case. 
+7. Click "Next: Permissions." 
+8. In the permissions search box, type "AmazonSSMFullAccess" and select the policy.
+9. Provide a name for the role, like "master1" and add a description (optional). 
+10. Scroll down and click "Create role." 
+ 
+Step 2: Create an Elastic Beanstalk Environment
+1. Go to the Elastic Beanstalk dashboard. 
+2. Click "Create a new environment (application)." 
+3. Choose "Web server environment." And configure the environment settings, including the application name, environment name, and platform version. 
+4. Select the Python platform for your application and go to next page. 
+5. Configure the service access. Select create a new service role if you are doing it for first time. Select the key pair you have created and attach the newly create “master1” IAM role to EC2 instance profile.  
+6. You can customize other settings like instance type, security, and environment variables if needed (no changes in our case). 
+7. Click "Submit."
+It will create the environment and provide you the domain link where sample python application will be deployed. 
+ 
+
+Sample Application:
+The Sample application will also provide some documentation link.
+
+
+Step 3: Create a CodePipeline. 
+
+1. Go to the CodePipeline dashboard.
+2. Click "Create pipeline." 
+3. Provide a name for your pipeline. 
+4. In the "Source" stage:
+   a. Select GitHub as the source provider. 
+   b. Connect your GitHub account if you haven't already. 
+   c. Choose the repository and branch you want to trigger the pipeline. 
+	 
+5. In the "Build" stage (optional):
+   a. You can add a build step using CodeBuild or another build tool if needed.
+   b. Configure the build settings according to your project's requirements. 
+	 
+
+6. In the "Deploy" stage:
+   a. Choose Elastic Beanstalk as the deployment provider. 
+   b. Select the Elastic Beanstalk application and environment you created in Step 2.
+	 
+
+7. Click "Next" and review your pipeline configuration.
+8. Click "Create pipeline."
+ 
+Created our pipeline:
+ 
+
+Our application will be deployed to the domain URL. Python application should be in the name application.py in our repository.
 
