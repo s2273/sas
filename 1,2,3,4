@@ -1,0 +1,82 @@
+1)web application EC2
+
+Choose an Amazon Machine Image (AMI) for your instance (e.g., Amazon Linux 2).
+• Select an instance type (e.g., t2.micro) based on your requirements.
+• Create a new key pair or use an existing one to securely connect to the instance later.
+#Give name and create key pair
+• Configure the instance details (e.g., network settings, security groups).
+• Review your settings and click on "Launch."
+#After Launching
+sudo su –
+yum update -y
+yum install -y httpd
+systemctl status httpd
+mkdir temp1
+cd temp1
+wget https://www.free-css.com/assets/files/free-csstemplates/download/page293/fitapp.zip
+unzip fitapp.zip
+ls -ltr
+ cd mobile-app-html-template
+ mv * /var/www/html
+service httpd start
+ systemctl status httpd
+
+2)python web app using flask
+Step 1: Create an EC2 instance with Ubuntu in Amazon Machine Image allowing HTTP and
+HTTPS traffic.
+Step 2: Update package information on the Ubuntu EC2 instance.
+sudo apt update
+Step 3: Install Python3 package manager (pip) on the instance.
+sudo apt install python3-pip
+Step 4: Check the version of pip to verify installation.
+pip --version
+Step 5: Check the version of Git to verify installation.
+git --version
+Step 6: Clone the GitHub repository containing the Flask web application code.
+git clone https://github.com/yeshwanthlm/docker-flask-demo
+Step 7: List files and directories in the directory in long format.
+ls -ltr
+cd docker-flask-demo
+ls -ltr
+Step 10: Install the Flask package using pip3.
+pip3 install flask
+python3 app.py
+Step 12: Allow Custom TCP port 8080 in Inbound rules.
+#Go to EC2 Dashboard, Select Instance – Security – Security groups
+#Select Edit inbound rules
+#Select Add rule
+#Set port range 8080, choose Anywhere-IPv4 and Click save rules
+Step 13: Now open <Public_IP_Address_of_EC2_Instance>:8080 in Browser
+
+3)CRUD 
+sudo apt update
+sudo apt install mysql-server
+sudo systemctl status mysql
+sudo mysql
+create database student;
+show databases;
+use student;
+create table name_details(id int,name varchar(45));
+insert into name_details values(1,'Jenish'),(2,'Revaldo'),(3,'mery');
+select * from name_details;
+UPDATE name_details SET name = 'Mahe' WHERE id = 3;
+DELETE FROM name_details WHERE id = 2;
+select * from name_details;
+
+4)Flask web app in docker
+sudo apt update
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+docker --version
+git clone https://github.com/yeshwanthlm/docker-flask-demo
+ls -ltr
+cd docker-flask-demo
+ls -ltr
+cat Dockerfile
+sudo docker build -t amc/flaskapp .
+sudo docker images
+sudo docker run -d -p 80:8080(paste the image ID here)
+ sudo docker ps
+Step 14: Allow Custom TCP port 80 in Inbound rules.
+Step 15: Now open <Public_IP_Address_of_EC2_Instance>:80 in Browser
+
