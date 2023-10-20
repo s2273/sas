@@ -16,18 +16,18 @@ x = data[0]
 y = data[1]
 #Model Creation
 model = Sequential()
-model.add(Dense(1135, activation=&#39;tanh&#39;, input_dim=4))
-model.add(Dense(624, activation=&#39;relu&#39;))
-model.add(Dense(114, activation=&#39;relu&#39;))
-model.add(Dense(1,activation=&#39;sigmoid&#39;))
+model.add(Dense(1135, activation='tanh', input_dim=4))
+model.add(Dense(624, activation='relu'))
+model.add(Dense(114, activation='relu'))
+model.add(Dense(1,activation='sigmoid'))
 adam = Adam(0.001)
 #Model compilation
-model.compile(optimizer=adam, loss=&#39;binary_crossentropy&#39;, metrics=[&#39;accuracy&#39;])
+model.compile(optimizer=adam, loss='binary_crossentropy', metrics=['accuracy'])
 print(model.summary())
 history = model.fit(x, y, epochs=150, batch_size=5, validation_split=0.2)
-pd.DataFrame(model.history.history).reset_index().plot(&#39;index&#39;, kind=&#39;line&#39;)
+pd.DataFrame(model.history.history).reset_index().plot('index', kind='line')
 data = pd.DataFrame(history.history)
-data.loc[data[&#39;accuracy&#39;].idxmax()]
+data.loc[data['accuracy'].idxmax()]
 Regression:
 #Importing the dataset
 data = make_regression(200,4,random_state=1)
@@ -36,23 +36,23 @@ y=data[1]
 #r2
 from keras import backend as k
 def r2(y_true,y_pred):
-ss_res = k.sum(k.square(y_true-y_pred))
-ss_tot = k.sum(k.square(y_true-k.mean(y_true)))
-return (1-ss_res/(ss_tot))
+  ss_res = k.sum(k.square(y_true-y_pred))
+  ss_tot = k.sum(k.square(y_true-k.mean(y_true)))
+  return (1-ss_res/(ss_tot))
 #Model Creation
 model = Sequential()
-model.add(Dense(1135,activation= &#39;tanh&#39;, input_dim = 4))
-model.add(Dense(624, activation=&#39;relu&#39;))
+model.add(Dense(1135,activation='tanh', input_dim = 4))
+model.add(Dense(624, activation='relu'))
 model.add(Dense(114))
 model.add(Dense(1))
 adam = Adam(0.0001)
 #Model compilation
-model.compile(optimizer=adam, loss=&#39;mean_squared_error&#39;, metrics=[r2])
+model.compile(optimizer=adam, loss='mean_squared_error', metrics=[r2])
 print(model.summary())
 history = model.fit(x,y,epochs=150, batch_size=5, validation_split=0.2)
-pd.DataFrame(model.history.history)[[&#39;r2&#39;,&#39;val_r2&#39;]].reset_index().plot(&#39;index&#39;, kind=&#39;line&#39;)
+pd.DataFrame(model.history.history)[['r2','val_r2']].reset_index().plot('index', kind='line')
 data = pd.DataFrame(history.history)
-data.loc[data[&#39;r2&#39;].idxmax()]
+data.loc[data['r2'].idxmax()]
 
 2)ann
 #CLASSIFICATION
@@ -60,7 +60,7 @@ data.loc[data[&#39;r2&#39;].idxmax()]
 import numpy as np
 import pandas as pd
 #Importing data
-data = pd.read_csv(&#39;/content/drive/MyDrive/Dataset/healthcare-dataset-stroke-data.csv&#39;)
+data = pd.read_csv('/content/drive/MyDrive/Dataset/healthcare-dataset-stroke-data.csv')
 data.head()
 data=data.dropna()
 data.columns
@@ -167,8 +167,8 @@ x_test = x_test.astype(&#39;float32&#39;)
 #Normalize values 0 to 1
 x_train/=255
 x_test/=255
-print(x_train.shape[0],&#39;train samples&#39;)
-print(x_test.shape[0],&#39;test samples&#39;)
+print(x_train.shape[0],'train samples')
+print(x_test.shape[0],'test samples')
 #Convert class vectors to binary class metrics
 from tensorflow.keras.utils import to_categorical
 
@@ -176,33 +176,33 @@ y_train=to_categorical(y_train,num_classes)
 y_test=to_categorical(y_test,num_classes)
 #Viewing an image
 import pylab as plt
-print(&#39;label:&#39;,y_test[400:401])
-plt.imshow(x_test[400:401].reshape(28,28),cmap=&#39;gray&#39;)
+print('label:',y_test[400:401])
+plt.imshow(x_test[400:401].reshape(28,28),cmap='gray')
 plt.show()
 #Model creation
 model=Sequential()
-model.add(Conv2D(8,kernel_size=(3,3),activation=&#39;relu&#39;,input_shape=(28,28,1)))
-model.add(Conv2D(filters=16,kernel_size=(3,3),activation=&#39;relu&#39;))
+model.add(Conv2D(8,kernel_size=(3,3),activation='relu',input_shape=(28,28,1)))
+model.add(Conv2D(filters=16,kernel_size=(3,3),activation='relu'))
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.25))
 model.add(Flatten())
-model.add(Dense(32,activation=&#39;relu&#39;))
+model.add(Dense(32,activation='relu'))
 model.add(Dropout(0.5))
-model.add(Dense(num_classes,activation=&#39;softmax&#39;))
+model.add(Dense(num_classes,activation='softmax'))
 model.summary()
 #Model compilation
 model.compile(loss = keras.losses.categorical_crossentropy, optimizer =
-tf.keras.optimizers.Adam(), metrics = [&#39;accuracy&#39;])
+tf.keras.optimizers.Adam(), metrics = ['accuracy'])
 
 model.fit(x_train, y_train, batch_size = batch_size, epochs = epochs, verbose = 1,
 validation_data = (x_test,y_test))
 #Model evaluation
 score = model.evaluate(x_test,y_test, verbose = 0)
-print(&#39;Test Loss: &#39;, score[0])
-print(&#39;Test Accuracy: &#39;, score[1])
+print('Test Loss: ', score[0])
+print('Test Accuracy: ', score[1])
 #Comparing the original image with predicted value
 import pylab as plt
-plt.imshow(x_test[230:231].reshape(28,28), cmap= &#39;gray&#39;)
+plt.imshow(x_test[230:231].reshape(28,28), cmap= 'gray')
 plt.show()
 import numpy as np
 
